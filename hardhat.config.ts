@@ -108,6 +108,12 @@ const config: HardhatUserConfig = {
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
       saveDeployments: true
     },
+    mumbai: {
+      url: "https://rpc-mumbai.maticvigil.com",
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+      saveDeployments: true
+    }
     /* polygon_mumbai_testnet: {
       url: "https://speedy-nodes-nyc.moralis.io//polygon/mumbai",
       accounts:[privateKey],
