@@ -1,4 +1,64 @@
-#  Hardhat-Starter-Template
+#  Solidity-Multichain-Deployments-Shared-Address
+
+
+## STEPS
+
+### 1. Ensure your account has the same nonce on each network
+
+NOTE: The address that a contract will get at deployment is computed as `H($ACCOUNT_ADDRESS + $ACCOUNT_NONCE + $CONTRACT_BYTECODE) where H is a universal hash function (keccak256)`
+
+Nonces start at 0 for a fresh account. So a deployment wallet needs the same nonce on each network. The nonce will match the amount of contracts deployed from that wallet.
+In other words, deploying the contract will increment the wallets nonce by +1
+
+Run `npx hardhat wallet --address 0x0123ABC`
+
+
+i.e, here is an example, you wish to have the nonces equal on all networks you wish to deploy on
+
+```bash
+[
+  [ '  |NETWORK|   |NONCE|   |BALANCE|  ' ],
+  [ 'Ethereum Goerli:', 1, '1.47ETH' ],
+  [ 'Polygon  Mumbai:', 1, '9.99ETH' ],
+  [ 'Arbitrum Rinkby:', 1, '1.49ETH' ],
+  [ 'Optimism Goerli:', 1, '2.26ETH' ]
+]
+```
+
+With our nonces set equally as above, deploying the SAME contract, to MULTIPLE networks from the SAME wallet will result in EQUAL contract addresses on each network
+
+
+### 2. Deploy a Deterministic Deploy Factory Contract
+
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
+
+contract DeterministicDeployFactory {
+    event Deploy(address addr);
+
+    function deploy(bytes memory bytecode, uint256 _salt) external {
+        address addr;
+        assembly {
+            addr := create2(0, add(bytecode, 0x20), mload(bytecode), _salt)
+            if iszero(extcodesize(addr)) {
+                revert(0, 0)
+            }
+        }
+
+        emit Deploy(addr);
+    }
+}
+
+```
+
+### 3. Deploy contracts using our Deploy Factory Contract
+
+
+
+
+###
 
 ## OVERVIEW
 
@@ -31,12 +91,12 @@ Available recipes:
 ### Running tests and audits
 
 - Run the unit tests with `just test`
-- Statically analyse code for vulnerabilities with `just audit` 
+- Statically analyse code for vulnerabilities with `just audit`
 
 
 ### Starting a new project from this template
 
-- Clean the workspace (to start a new project, removing example code and scripts) using `just clean` 
+- Clean the workspace (to start a new project, removing example code and scripts) using `just clean`
 - Create your solidity code in `/contracts`, tests in `/test` and deploy/verify scripts in `/scripts`
 
 

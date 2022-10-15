@@ -1,3 +1,4 @@
+import {ethers} from 'hardhat'
 const main = async () => {
     const Factory = await ethers.getContractFactory("DeterministicDeployFactory");
     const factory = await Factory.deploy();
