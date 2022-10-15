@@ -58,10 +58,8 @@ contract DeterministicDeployFactory {
 
 ### 3. Deploy contracts using our Deploy Factory Contract
 
+Here we will use our DeterministicDeployFactory.deploy() function to deploy our contracts under that address.
 
-
-
-###
 
 ## OVERVIEW
 
