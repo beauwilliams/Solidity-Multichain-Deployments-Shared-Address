@@ -28,11 +28,14 @@ i.e, here is an example, you wish to have the nonces equal on all networks you w
 ]
 ```
 
-With our nonces set equally as above, deploying the SAME contract, to MULTIPLE networks from the SAME wallet will result in EQUAL contract addresses on each network
+With our nonces set equally as above, deploying the SAME contract, to MULTIPLE networks from the SAME wallet will result in EQUAL contract addresses on each network using `CREATE` opcode through an EOA
 
 
 ### 2. Deploy a Deterministic Deploy Factory Contract
 
+NOTE: `CREATE2` opcode is used here to deploy multiple contracts from the same factory address, which was deployed on multiple chains with the same address in **Step 1** using `CREATE` opcode
+
+`CREATE2` can be called only from smart contracts (EOA can't use CREATE2)
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -58,8 +61,11 @@ contract DeterministicDeployFactory {
 
 ### 3. Deploy contracts using our Deploy Factory Contract
 
-Here we will use our DeterministicDeployFactory.deploy() function to deploy our contracts under that address.
+NOTE: The address that a contract will get at deployment is computed as `H($FACTORY_ADDRESS + $SALT_VALUE + $CONTRACT_BYTECODE) where H is a universal hash function (keccak256)`
 
+Here we will use `DeterministicDeployFactory.deploy()` function to deploy our contracts under that address.
+
+[As of 2024, CREATE3 is another method which has been proposed which improves upon CREATE2 without introducing a new opcode](https://github.com/SKYBITDev3/SKYBIT-Keyless-Deployment)
 
 ## OVERVIEW
 
