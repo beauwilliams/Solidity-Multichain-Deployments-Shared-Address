@@ -44,6 +44,7 @@ pragma solidity ^0.8.13;
 contract DeterministicDeployFactory {
     event Deploy(address addr);
 
+    //I'm a public function, in production you will want to protect me with access controls to prevent attackers frontrunning your deployments
     function deploy(bytes memory bytecode, uint256 _salt) external {
         address addr;
         assembly {
